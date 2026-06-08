@@ -120,7 +120,8 @@ Your flow should have 3 steps:
 1. Click **Save** in the top-right corner
 2. Click **Test** in the top-right corner
 3. Select **Manually** and click **Test**
-4. Now, go to your **Canvas App** and submit a new beneficiary change request
+4. Now, go to your **Canvas App** and open a Draft request → click **Submit for Review** (this changes the status to "Submitted" and creates the trigger condition)
+   - Alternatively, create a new row directly in Dataverse with status "Submitted"
 5. Return to the flow — it should show a successful run
 6. Check your email for the notification
 7. Open your **Model-Driven App** and verify the record status changed to "Under Review"

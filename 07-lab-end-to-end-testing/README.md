@@ -17,14 +17,24 @@ Here's what you've built — now let's test it end-to-end:
 
 ```
 ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
-│   CANVAS APP     │    │    DATAVERSE      │    │  POWER AUTOMATE  │    │ MODEL-DRIVEN APP │
-│                  │    │                   │    │                  │    │                  │
-│  Requestor       │───▶│  New row created  │───▶│  Flow triggers:  │    │  Reviewer opens  │
-│  submits form    │    │  Status:Submitted │    │  • Send email    │    │  request         │
-│                  │    │                   │    │  • Update status │    │  • Reviews data   │
-│                  │    │  Status updated   │◀───│    to "Under     │    │  • Changes status │
-│                  │    │  to Under Review  │    │    Review"       │    │  • Adds notes    │
+│  INCOMING EMAIL   │    │   CANVAS APP     │    │  POWER AUTOMATE  │    │ MODEL-DRIVEN APP │
+│  (from client)    │    │  (Intake Team)   │    │                  │    │   (Reviewer)     │
+│                   │    │                  │    │                  │    │                  │
+│  Client requests  │───▶│  Staff enters    │───▶│  Flow triggers:  │───▶│  Reviewer opens  │
+│  a beneficiary    │    │  request from    │    │  • Send email    │    │  request         │
+│  change           │    │  email into      │    │  • Update status │    │  • Reviews data   │
+│                   │    │  system as Draft │    │    to "Under     │    │  • Approves or    │
+│                   │    │  then Submits    │    │    Review"       │    │    rejects       │
+│                   │    │  for Review      │    │                  │    │  • Adds notes    │
 └──────────────────┘    └──────────────────┘    └──────────────────┘    └──────────────────┘
+                              │                                               │
+                              ▼                                               ▼
+                        ┌──────────────────┐                           ┌──────────────────┐
+                        │    DATAVERSE      │                           │    DATAVERSE      │
+                        │  Row created as   │                           │  Status updated   │
+                        │  "Draft" then     │                           │  to "Approved"    │
+                        │  "Submitted"      │                           │  or "Rejected"    │
+                        └──────────────────┘                           └──────────────────┘
 ```
 
 ---
@@ -33,11 +43,15 @@ Here's what you've built — now let's test it end-to-end:
 
 Follow these steps in order. Check off each one as it passes.
 
-### Test 1: Submit a New Request
+### Test 1: Enter a New Request from an "Email"
 
-1. Open your **Canvas App** (`{Prefix} - BCR Submission App`)
-2. Click **Start New Request**
-3. Fill in all fields with this test data:
+Imagine you just received this email from a client:
+
+> *"Hello, my name is Test User and I need to change the beneficiary on account ACCT-99999. The current beneficiary is Original Beneficiary. I'd like to change it to Updated Beneficiary, who is my spouse. This is part of an end-to-end test. My email is testuser@contoso.com. Thank you."*
+
+1. Open your **Canvas App** (`{Prefix} - BCR Intake App`)
+2. Click **＋ New Request**
+3. Enter the details from the "email" above:
 
 | Field | Value |
 |-------|-------|
@@ -50,23 +64,33 @@ Follow these steps in order. Check off each one as it passes.
 | New Beneficiary Relationship | `Spouse` |
 | Reason for Change | `End-to-end test of beneficiary change request process` |
 
-4. Click **Submit Request**
+4. Click **Save as Draft**
 
 **Expected result:**
-- [ ] Confirmation screen appears
-- [ ] No error messages
+- [ ] Record saves successfully — notification appears
+- [ ] You're returned to the dashboard
+- [ ] New record appears in the gallery with "Draft" status
 
-### Test 2: Verify Dataverse Record
+### Test 2: Submit the Request for Review
+
+1. On the dashboard, click the `BCR-TEST-001` record you just created
+2. Review the data for completeness
+3. Click **Submit for Review**
+
+**Expected result:**
+- [ ] Record status changes to "Submitted"
+- [ ] You're returned to the dashboard
+
+### Test 3: Verify Dataverse Record
 
 1. Go to [make.powerapps.com](https://make.powerapps.com) → **Tables**
 2. Find your `{Prefix} Beneficiary Change Request` table
 3. Open the data view
 
 **Expected result:**
-- [ ] New row exists with test data
-- [ ] Request Status should be "Submitted" initially (then "Under Review" after flow runs)
+- [ ] Row exists with test data and status "Submitted" (then "Under Review" after flow runs)
 
-### Test 3: Verify Flow Execution
+### Test 4: Verify Flow Execution
 
 1. Go to [make.powerautomate.com](https://make.powerautomate.com)
 2. Find your `{Prefix} - BCR Notification Flow`
@@ -77,7 +101,7 @@ Follow these steps in order. Check off each one as it passes.
 - [ ] Flow run shows **Succeeded** status
 - [ ] Each step (trigger, email, update) shows green checkmarks
 
-### Test 4: Verify Email Notification
+### Test 5: Verify Email Notification
 
 1. Check your email inbox (and spam/junk folder)
 
@@ -85,7 +109,7 @@ Follow these steps in order. Check off each one as it passes.
 - [ ] Email received with subject containing `BCR-TEST-001`
 - [ ] Email body contains the request details (requestor name, account, beneficiaries, reason)
 
-### Test 5: Verify Status Update
+### Test 6: Verify Status Update
 
 1. Go back to the Dataverse table data view
 2. Find the `BCR-TEST-001` record
@@ -93,7 +117,7 @@ Follow these steps in order. Check off each one as it passes.
 **Expected result:**
 - [ ] Request Status is now `Under Review` (updated by the flow)
 
-### Test 6: Review in Model-Driven App
+### Test 7: Review in Model-Driven App
 
 1. Open your **Model-Driven App** (`{Prefix} - BCR Review App`)
 2. Navigate to the **Submitted Requests** or **All Active Requests** view
@@ -118,20 +142,21 @@ Follow these steps in order. Check off each one as it passes.
 
 | Test | Component | Pass/Fail |
 |------|-----------|-----------|
-| 1 | Canvas App → Submit | |
-| 2 | Dataverse → Record Created | |
-| 3 | Power Automate → Flow Ran | |
-| 4 | Email → Notification Received | |
-| 5 | Dataverse → Status Updated | |
-| 6 | Model-Driven App → Review & Approve | |
+| 1 | Canvas App → Enter & Save Draft | |
+| 2 | Canvas App → Submit for Review | |
+| 3 | Dataverse → Record Created | |
+| 4 | Power Automate → Flow Ran | |
+| 5 | Email → Notification Received | |
+| 6 | Dataverse → Status Updated | |
+| 7 | Model-Driven App → Review & Approve | |
 
 ### 🎉 If all tests pass — congratulations!
 
-You've built a complete Power Platform solution that replaces a legacy paper/email process with:
-- A modern submission form (Canvas App)
-- Automated notifications (Power Automate)
+You've built a complete Power Platform solution that replaces a legacy email/spreadsheet process with:
+- An internal intake dashboard for processing incoming requests (Canvas App)
+- Automated notifications and status updates (Power Automate)
 - Centralized data storage (Dataverse)
-- An internal review tool (Model-Driven App)
+- An internal review and approval tool (Model-Driven App)
 
 ---
 
@@ -158,7 +183,8 @@ In a real-world implementation, you would also consider:
 - **SLA tracking** — monitor how long requests take to process
 - **Power BI dashboard** — visualize request volumes, approval rates, processing times
 - **Copilot Studio bot** — let requestors check status via chat
-- **Power Pages portal** — external self-service submission
+- **Power Pages portal** — external client self-service submission (instead of email intake)
+- **Email parsing flow** — automatically create Dataverse records from incoming client emails using AI Builder
 - **Environment strategy** — separate dev/test/production environments
 - **DLP policies** — data loss prevention for connectors
 - **Solution deployment** — managed solutions for production release

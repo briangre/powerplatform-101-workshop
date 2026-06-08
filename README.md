@@ -8,9 +8,9 @@ This workshop introduces the Microsoft Power Platform through a practical, hands
 
 By the end of this workshop, attendees will have built a working solution that:
 
-- Captures beneficiary change requests through a user-friendly form (Canvas App)
+- Provides an internal intake and processing dashboard for incoming requests (Canvas App)
 - Provides an internal review and approval experience (Model-Driven App)
-- Automates notifications and status updates (Power Automate)
+- Automates notifications and status updates when requests are submitted (Power Automate)
 - Stores all data in a structured, secure database (Dataverse)
 
 ## Who Is This For?
@@ -26,7 +26,7 @@ Professionals looking to convert legacy workflow processes (paper forms, email c
 | 0:50 | 40 min | [Lab 1: Dataverse Tables & Data Model](03-lab-dataverse-tables/README.md) | 💻 Hands-On |
 | 1:30 | 40 min | [Lab 2: Model-Driven App (Review & Approval)](04-lab-model-driven-app/README.md) | 💻 Hands-On |
 | 2:10 | 10 min | ☕ **Break** | — |
-| 2:20 | 45 min | [Lab 3: Canvas App (Request Submission)](05-lab-canvas-app/README.md) | 💻 Hands-On |
+| 2:20 | 45 min | [Lab 3: Canvas App (Intake & Processing)](05-lab-canvas-app/README.md) | 💻 Hands-On |
 | 3:05 | 30 min | [Lab 4: Power Automate (Notifications & Automation)](06-lab-power-automate/README.md) | 💻 Hands-On |
 | 3:35 | 15 min | [Lab 5: End-to-End Testing](07-lab-end-to-end-testing/README.md) | 💻 Hands-On |
 | 3:50 | 10 min | Wrap-Up, Q&A, & Next Steps | 📖 Discussion |
@@ -40,10 +40,10 @@ See [Prerequisites](00-prerequisites/README.md) for environment and access requi
 > ⚠️ **Training purposes only.** All data used in this workshop is fictional. No real client or beneficiary information should be entered.
 
 A client needs to update the beneficiary on their account. Today this process involves:
-- Filling out a paper or PDF form
-- Emailing it to a processing team
-- Manual review and approval
-- Data entry into a back-end system
+- The client sends an email (or paper form) requesting a beneficiary change
+- An internal team member manually reads the email and enters the data into a spreadsheet or legacy system
+- The request is forwarded via email to a reviewer for approval
+- Manual status tracking via email threads
 - Email confirmation back to the client
 
 **In this workshop, we'll modernize this entire process using Power Platform.**
@@ -56,7 +56,7 @@ A client needs to update the beneficiary on their account. Today this process in
 ├── 02-lab-environment-setup/  # Environment navigation & solution setup
 ├── 03-lab-dataverse-tables/   # Lab 1: Build the data model
 ├── 04-lab-model-driven-app/   # Lab 2: Build the review experience
-├── 05-lab-canvas-app/         # Lab 3: Build the submission form
+├── 05-lab-canvas-app/         # Lab 3: Build the intake & processing dashboard
 ├── 06-lab-power-automate/     # Lab 4: Build automation flows
 ├── 07-lab-end-to-end-testing/ # Lab 5: Test the full process
 ├── facilitator-guide/         # Instructor notes & timing

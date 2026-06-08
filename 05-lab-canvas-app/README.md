@@ -1,20 +1,28 @@
-# Lab 3: Canvas App — Request Submission Form
+# Lab 3: Canvas App — Intake & Processing Dashboard
 
 > **Duration:** 45 minutes | **Type:** Hands-On Lab
 
 ## Learning Objectives
 
 - Create a Canvas App from scratch
-- Design a multi-screen submission form
-- Connect to Dataverse as a data source
-- Use formulas to submit and validate data
-- Create a user-friendly experience for request submission
+- Build a gallery-based dashboard to browse Dataverse records
+- Use navigation with context to pass data between screens
+- Create an edit form for processing requests
+- Use formulas to filter, update, and submit data
 
 ---
 
-## Why Canvas App?
+## The Business Context
 
-While the model-driven app serves internal reviewers, the **Canvas App** provides a clean, branded submission experience for requestors. Canvas apps give you pixel-perfect control over the UI — every button, layout, and color is yours to design.
+In our beneficiary change request process, requests arrive from clients **via email** (or in a production scenario, through a Power Pages portal). An internal team member needs to:
+
+1. **Enter** the request details from the email into the system
+2. **Review** draft requests for completeness
+3. **Submit** completed requests for formal review
+
+The **Model-Driven App** (Lab 2) is designed for reviewers and approvers. This **Canvas App** is the day-to-day tool for the **intake team** — the people who receive the emails, enter the data, and prepare requests for review.
+
+> 💡 **Why Canvas App for this?** Canvas apps give you pixel-perfect control over the layout and user experience. For an intake dashboard that an internal team uses all day, you want a streamlined, purpose-built interface — not a generic data entry form.
 
 ---
 
@@ -25,8 +33,8 @@ While the model-driven app serves internal reviewers, the **Canvas App** provide
 1. Open your solution (`PP101 BCR - {Your Name}`)
 2. Click **+ New** → **App** → **Canvas app**
 3. Fill in:
-   - **App name:** `{Prefix} - BCR Submission App` (e.g., `BG - BCR Submission App`)
-   - **Format:** Tablet (or Phone — your choice)
+   - **App name:** `{Prefix} - BCR Intake App` (e.g., `BG - BCR Intake App`)
+   - **Format:** Tablet
 4. Click **Create**
 5. The Canvas App Studio (Power Apps Studio) will open
 
@@ -37,165 +45,215 @@ While the model-driven app serves internal reviewers, the **Canvas App** provide
 3. Search for your table: `{Prefix} Beneficiary Change Request`
 4. Select it and click **Connect**
 
-### Step 3: Design Screen 1 — Welcome / Home Screen
+### Step 3: Design Screen 1 — Intake Dashboard
 
-1. Rename the default screen to `scrHome`
-2. Add the following controls:
+1. Rename the default screen to `scrDashboard`
 
-#### Title & Instructions
+#### Add a Header
 
-1. Insert → **Text label**
-   - **Text:** `Beneficiary Change Request`
-   - **Font size:** 28, **Bold:** true
-   - Position at the top-center of the screen
+1. Insert → **Rectangle** (or container)
+   - Position at the top of the screen, full width
+   - **Fill:** A dark color (e.g., `RGBA(0, 70, 127, 1)`)
 
-2. Insert → **Text label** (below the title)
-   - **Text:** `Use this form to submit a request to change the beneficiary on your account. Please have your account number and beneficiary information ready.`
-   - **Font size:** 14
-   - **Auto height:** true
+2. Insert → **Text label** (on top of the rectangle)
+   - **Text:** `Beneficiary Change Request — Intake Dashboard`
+   - **Font size:** 22, **Bold:** true, **Color:** White
 
-#### Start Button
+#### Add the "New Request" Button
 
-3. Insert → **Button**
-   - **Text:** `Start New Request`
-   - **OnSelect:** `Navigate(scrRequestForm, ScreenTransition.Fade)`
-   - Style it with a color that fits your design
+3. Insert → **Button** (top-right area, near the header)
+   - **Text:** `＋ New Request`
+   - **OnSelect:**
+   ```
+   NewForm(frmRequest);
+   Navigate(scrRequestForm, ScreenTransition.Fade)
+   ```
 
-### Step 4: Design Screen 2 — Request Form
+#### Add a Gallery of Requests
+
+4. Insert → **Vertical gallery**
+5. Set the **Data source** (Items property) to your Beneficiary Change Request table:
+   ```
+   SortByColumns(
+       Filter(
+           '{Prefix} Beneficiary Change Requests',
+           'Request Status' = 'Request Status'.Draft
+              || 'Request Status' = 'Request Status'.Submitted
+              || 'Request Status' = 'Request Status'.'Under Review'
+       ),
+       "createdon",
+       SortOrder.Descending
+   )
+   ```
+   > 💡 Replace `{Prefix} Beneficiary Change Requests` with your actual table name. This shows active requests sorted by newest first.
+
+6. Customize the gallery template to show key fields:
+   - Click on the gallery and select the template (first row)
+   - Add/edit labels inside the template:
+     - **Title:** `ThisItem.Name` (the Request ID, e.g., BCR-001)
+     - **Subtitle:** `ThisItem.'Requestor Full Name' & " — " & ThisItem.'Account Number'`
+     - **Status:** `Text(ThisItem.'Request Status')`
+   - Optionally add color-coded status indicators
+
+7. Set the gallery's **OnSelect** property:
+   ```
+   Navigate(scrRequestForm, ScreenTransition.Fade)
+   ```
+
+#### Add a Request Count Label
+
+8. Insert → **Text label** (below the header, above the gallery)
+   - **Text:** `CountRows(Gallery1.AllItems) & " active requests"`
+   - **Font size:** 12, **Italic:** true
+   > Replace `Gallery1` with your actual gallery control name.
+
+### Step 4: Design Screen 2 — Request Form (Edit/New)
 
 1. Insert → **New screen** → **Blank**
 2. Rename to `scrRequestForm`
 
+#### Add a Header with Back Button
+
+1. Insert → **Left arrow icon** (or Button)
+   - **OnSelect:** `Navigate(scrDashboard, ScreenTransition.Fade)`
+   - Position in the top-left
+
+2. Insert → **Text label** (header)
+   - **Text:** `If(frmRequest.Mode = FormMode.New, "New Request — Enter from Email", "Edit Request — " & frmRequest.LastSubmit.Name)`
+   - **Font size:** 20, **Bold:** true
+
 #### Add an Edit Form
 
-1. Insert → **Edit form**
-2. Set the **Data source** to your Beneficiary Change Request table
-3. Resize the form to fill most of the screen
-4. The form will auto-populate with fields from your table
+3. Insert → **Edit form** (name it `frmRequest`)
+4. Set the **Data source** to your Beneficiary Change Request table
+5. Set the **Item** property to:
+   ```
+   Gallery1.Selected
+   ```
+   > Replace `Gallery1` with the name of your gallery on the Dashboard screen. This loads the selected record when editing. For new records, `NewForm()` (called from the dashboard) puts the form in "New" mode.
+
+6. Resize the form to fill the screen (below the header)
 
 #### Configure Form Fields
 
-1. Click on the form and go to **Properties** → **Edit fields**
-2. Remove fields that shouldn't be on the submission form:
-   - Remove: Reviewer Notes, Created On, Modified On, Owner
-3. Keep and reorder these fields:
+7. Click on the form and go to **Properties** → **Edit fields**
+8. Remove system fields:
+   - Remove: Created On, Modified On, Owner, Status Reason
+9. Reorder fields logically:
+
+   **Requestor Information:**
    - Requestor Full Name
    - Requestor Email
    - Requestor Phone
    - Account Number
+
+   **Beneficiary Change:**
    - Current Beneficiary Name
    - Current Beneficiary Relationship
    - New Beneficiary Name
    - New Beneficiary Relationship
    - New Beneficiary Date of Birth
+
+   **Request Details:**
    - Reason for Change
+   - Request Date
+   - Request Status
 
-4. Lock the following fields or set default values:
-   - **Request Status:** Set the default to `Draft` and hide or lock this field
-   - **Request Date:** Set the default to `Today()` and lock this field
+10. Set defaults for new records:
+    - Unlock the **Request Date** data card → set its **Default** to `Today()`
+    - Unlock the **Request Status** data card → set its **Default** to `'Request Status'.Draft`
 
-#### Set Form Mode
+### Step 5: Add Action Buttons
 
-Set the form's **DefaultMode** property to:
-```
-FormMode.New
-```
+Add buttons below the form for the intake team's workflow:
 
-### Step 5: Add Submit and Cancel Buttons
+#### Save as Draft Button
 
-#### Submit Button
+1. Insert → **Button**
+   - **Text:** `Save as Draft`
+   - **OnSelect:**
+   ```
+   SubmitForm(frmRequest)
+   ```
+   - This saves the record in its current state (Draft by default)
 
-1. Insert → **Button** (below the form)
-2. **Text:** `Submit Request`
-3. **OnSelect:**
-```
-SubmitForm(Form1);
-```
-> Replace `Form1` with the actual name of your Edit Form control.
+#### Submit for Review Button
+
+2. Insert → **Button**
+   - **Text:** `Submit for Review ▶`
+   - **Fill:** A green or accent color to make it stand out
+   - **OnSelect:**
+   ```
+   Patch(
+       '{Prefix} Beneficiary Change Requests',
+       frmRequest.LastSubmit,
+       {'Request Status': 'Request Status'.Submitted}
+   );
+   SubmitForm(frmRequest)
+   ```
+   > This updates the status to "Submitted" and saves the record. Once submitted, the Power Automate flow (Lab 4) will pick it up.
+   
+   **Alternative simpler approach:** Unlock the Request Status data card, and before submitting, set its value:
+   ```
+   // Set status Update property to Submitted, then:
+   SubmitForm(frmRequest)
+   ```
 
 #### Cancel Button
 
-1. Insert → **Button**
-2. **Text:** `Cancel`
-3. **OnSelect:** `Navigate(scrHome, ScreenTransition.Fade)`
-
-### Step 6: Design Screen 3 — Confirmation
-
-1. Insert → **New screen** → **Blank**
-2. Rename to `scrConfirmation`
-3. Add controls:
-
-#### Success Message
-
-1. Insert → **Text label**
-   - **Text:** `✅ Your beneficiary change request has been submitted successfully!`
-   - **Font size:** 22
-   - Center on screen
-
-2. Insert → **Text label**
-   - **Text:** `You will receive updates on the status of your request.`
-
-#### Return Button
-
 3. Insert → **Button**
-   - **Text:** `Submit Another Request`
-   - **OnSelect:**
-   ```
-   ResetForm(Form1);
-   Navigate(scrRequestForm, ScreenTransition.Fade)
-   ```
+   - **Text:** `Cancel`
+   - **OnSelect:** `ResetForm(frmRequest); Navigate(scrDashboard, ScreenTransition.Fade)`
 
-4. Insert → **Button**
-   - **Text:** `Return Home`
-   - **OnSelect:** `Navigate(scrHome, ScreenTransition.Fade)`
+### Step 6: Wire Up Form Events
 
-### Step 7: Wire Up Form Submission
-
-1. Select your **Edit Form** on the Request Form screen
+1. Select the **frmRequest** Edit Form
 2. Set the **OnSuccess** property:
-```
-Navigate(scrConfirmation, ScreenTransition.Fade)
-```
+   ```
+   Notify("Request saved successfully.", NotificationType.Success);
+   Navigate(scrDashboard, ScreenTransition.Fade)
+   ```
 3. Set the **OnFailure** property:
-```
-Notify("There was an error submitting your request. Please try again.", NotificationType.Error)
-```
+   ```
+   Notify("Error saving request. Please try again.", NotificationType.Error)
+   ```
 
-### Step 8: Auto-Set Status to Submitted
-
-To automatically set the status when the form is submitted, update the **Request Status** data card:
-
-1. Unlock the **Request Status** data card (click the lock icon)
-2. Find the **Update** property of the data card
-3. Set it to the "Submitted" choice value:
-```
-'Request Status'.Submitted
-```
-
-> This ensures every new request is automatically set to "Submitted" status.
-
-### Step 9: Save and Test
+### Step 7: Save and Test
 
 1. Click **Save** (top-right)
 2. Click **Preview** (▶️ play button in top-right)
-3. Test the full flow:
-   - Click "Start New Request" on the home screen
-   - Fill in all required fields with fictional data
-   - Click "Submit Request"
-   - Verify you're taken to the confirmation screen
-4. Go to your **Model-Driven App** and verify the new record appears with status "Submitted"
+3. Test the following scenarios:
+
+#### Test A: View Existing Requests
+- The dashboard should show your sample data records
+- Click on a record — the form should open with its data loaded
+
+#### Test B: Create a New Request (from an email)
+- Click **＋ New Request**
+- Imagine you received this email from a client:
+  > *"Hi, I'd like to change the beneficiary on my account ACCT-77001 from my former spouse Maria Lopez to my daughter Isabella Lopez (DOB 2005-04-12). My name is Carlos Lopez, email carlos.lopez@contoso.com. Thank you."*
+- Enter the details from the "email" into the form
+- Click **Save as Draft**
+- Verify the record appears on the dashboard with "Draft" status
+
+#### Test C: Submit a Request for Review
+- Open the draft record you just created
+- Click **Submit for Review**
+- Verify the record status changes to "Submitted"
+- Open your **Model-Driven App** and verify the request appears in the "Submitted Requests" view
 
 ---
 
 ## ✅ Checkpoint
 
 Before moving on, confirm:
-- [ ] Canvas App has 3 screens (Home, Request Form, Confirmation)
-- [ ] The form connects to your Dataverse table
-- [ ] Submitting the form creates a new record in Dataverse
-- [ ] The status is automatically set to "Submitted"
-- [ ] Navigation between screens works
-- [ ] The submitted record appears in your Model-Driven App
+- [ ] Canvas App has 2 screens (Dashboard and Request Form)
+- [ ] The dashboard gallery shows Dataverse records filtered to active requests
+- [ ] Clicking a record opens it in the edit form
+- [ ] "New Request" button opens a blank form
+- [ ] "Save as Draft" creates/updates a record with Draft status
+- [ ] "Submit for Review" changes the status to Submitted
+- [ ] Submitted records appear in the Model-Driven App
 
 ---
 
@@ -203,22 +261,35 @@ Before moving on, confirm:
 
 | Issue | Fix |
 |-------|-----|
-| Data source not found | Confirm you're connected to the correct Dataverse table in the Data panel |
-| Form shows "No item to display" | Set the form's DefaultMode to `FormMode.New` |
-| Submit creates record but with blank status | Unlock the status data card and set the Update property |
-| OnSuccess doesn't fire | Make sure you used `SubmitForm(FormName)` with the correct form name |
-| Columns missing from form | Click Edit fields on the form and add the missing columns |
+| Gallery shows no records | Check the Items formula — verify table name and filter conditions |
+| Clicking a gallery item doesn't load the form | Verify the form's `Item` property is set to `Gallery1.Selected` |
+| Form shows "No item to display" | For new records, ensure `NewForm(frmRequest)` is called before navigating |
+| "Save as Draft" creates a new record instead of updating | Check that the form's Item property is correctly linked to the gallery selection |
+| Status doesn't change to Submitted | Verify you're patching with the correct choice value |
+| Data source not found | Confirm the Dataverse table is connected in the Data panel |
 
 ---
 
 ## 🚀 Stretch Goals
 
 If you finish early:
-- Add **input validation** (e.g., require email format, minimum length for Reason)
-- Add a **banner or logo** to the home screen for branding
-- Add a **gallery screen** that shows the user's previously submitted requests
-- Add a **loading spinner** while the form is submitting using a variable:
+- Add a **status filter dropdown** on the dashboard so users can toggle between Draft, Submitted, All
+- Add **conditional formatting** to the gallery: color-code items by status (e.g., Draft = gray, Submitted = blue, Under Review = orange)
+- Add a **search bar** to filter the gallery by requestor name or account number:
   ```
-  UpdateContext({isSubmitting: true});
-  SubmitForm(Form1);
+  Filter(
+      '{Prefix} Beneficiary Change Requests',
+      StartsWith('Requestor Full Name', txtSearch.Text)
+      || StartsWith('Account Number', txtSearch.Text)
+  )
+  ```
+- Add a **record count by status** section on the dashboard using `CountIf()`
+- Make the "Submit for Review" button **disabled** when required fields are empty:
+  ```
+  DisplayMode: If(
+      IsBlank(DataCardValue_RequestorFullName.Text)
+      || IsBlank(DataCardValue_ReasonForChange.Text),
+      DisplayMode.Disabled,
+      DisplayMode.Edit
+  )
   ```

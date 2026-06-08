@@ -42,7 +42,7 @@ Create a table mapping attendees to prefixes. Distribute this before or at the s
 | 0:50 | Lab 1: Dataverse | 40 min | This is the most critical lab — data model drives everything else |
 | 1:30 | Lab 2: Model-Driven App | 40 min | Quick wins here — the app "just works" from Dataverse |
 | 2:10 | **Break** | 10 min | |
-| 2:20 | Lab 3: Canvas App | 45 min | Most creative lab — attendees may need the most help here |
+| 2:20 | Lab 3: Canvas App | 45 min | Internal intake dashboard — gallery, forms, navigation with context |
 | 3:05 | Lab 4: Power Automate | 30 min | Connection setup can be tricky — be ready to help |
 | 3:35 | Lab 5: End-to-End Testing | 15 min | Celebrate successes — troubleshoot together |
 | 3:50 | Wrap-Up & Q&A | 10 min | |

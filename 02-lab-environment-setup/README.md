@@ -26,7 +26,7 @@ Your facilitator will assign you a **unique prefix** (typically your initials or
 | **Solution** | `PP101 BCR - {Your Name}` | `PP101 BCR - Brian G` |
 | **Dataverse Table (Display)** | `{Prefix} Beneficiary Change Request` | `BG Beneficiary Change Request` |
 | **Dataverse Table (Schema)** | `{prefix}_beneficiarychangerequest` | `bg_beneficiarychangerequest` |
-| **Canvas App** | `{Prefix} - BCR Submission App` | `BG - BCR Submission App` |
+| **Canvas App** | `{Prefix} - BCR Intake App` | `BG - BCR Intake App` |
 | **Model-Driven App** | `{Prefix} - BCR Review App` | `BG - BCR Review App` |
 | **Cloud Flow** | `{Prefix} - BCR Notification Flow` | `BG - BCR Notification Flow` |
 

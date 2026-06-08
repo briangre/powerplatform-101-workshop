@@ -44,9 +44,9 @@ By the end of this module, attendees will be able to:
 #### Canvas Apps
 - **Pixel-perfect control** — you design every screen, button, and layout
 - Start from a blank canvas or template
-- Great for: external-facing forms, mobile experiences, custom UI/UX
+- Great for: internal dashboards, task-specific tools, mobile experiences, custom UI/UX
 - Data sources: Dataverse, SharePoint, SQL, Excel, APIs, and more
-- Think: *"I want total control over the look and feel"*
+- Think: *"I want total control over the look and feel for a specific workflow"*
 
 #### Model-Driven Apps
 - **Data-first design** — the app structure comes from your Dataverse data model
@@ -59,11 +59,11 @@ By the end of this module, attendees will be able to:
 
 | Scenario | Canvas App | Model-Driven App |
 |----------|:---:|:---:|
-| Custom mobile form for clients | ✅ | |
+| Internal intake/processing dashboard | ✅ | |
 | Internal case management dashboard | | ✅ |
-| Simple data collection survey | ✅ | |
+| Custom mobile form for field workers | ✅ | |
 | Multi-entity relationship views | | ✅ |
-| Branded, pixel-perfect UI | ✅ | |
+| Branded, task-specific workflow tool | ✅ | |
 | Quick CRUD app from Dataverse | | ✅ |
 
 **Key message:** *"You don't have to choose one — many solutions use both together."*
@@ -101,7 +101,7 @@ By the end of this module, attendees will be able to:
 
 ## Transition to Hands-On Labs
 
-> *"Now that you've seen the big picture, let's build something. Over the next 3 hours, we're going to create a Beneficiary Change Request process from scratch — starting with the data, then building apps, and finally automating the workflow."*
+> *"Now that you've seen the big picture, let's build something. Over the next 3 hours, we're going to create a Beneficiary Change Request process from scratch — imagine a client emails in a request, your internal team needs to enter it, route it for approval, and track it to completion. We'll start with the data model, then build the apps and automation."*
 
 ---
 

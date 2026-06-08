@@ -1,0 +1,16 @@
+# Solution export files (large binary zips)
+# Uncomment the line below if you want to track solution exports in git
+# solutions/**/*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+~$*

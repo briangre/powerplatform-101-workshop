@@ -1,0 +1,6 @@
+Name,Requestor Full Name,Requestor Email,Requestor Phone,Account Number,Current Beneficiary Name,Current Beneficiary Relationship,New Beneficiary Name,New Beneficiary Relationship,New Beneficiary Date of Birth,Reason for Change,Request Date,Request Status
+BCR-001,Jane Smith,jane.smith@contoso.com,555-0101,ACCT-10045,John Smith,Spouse,Sarah Smith,Daughter,1995-03-15,Updating beneficiary after divorce,2026-06-08,Submitted
+BCR-002,Robert Chen,robert.chen@contoso.com,555-0102,ACCT-20078,Lisa Chen,Spouse,Michael Chen,Son,2000-08-22,Adding adult child as primary beneficiary,2026-06-08,Draft
+BCR-003,Maria Garcia,maria.garcia@contoso.com,555-0103,ACCT-30112,Carlos Garcia,Brother,Ana Garcia,Daughter,1998-11-30,Changing from sibling to child,2026-06-07,Under Review
+BCR-004,David Williams,david.williams@contoso.com,555-0104,ACCT-40089,Susan Williams,Mother,Emily Williams,Spouse,1990-05-12,Updating after marriage,2026-06-06,Approved
+BCR-005,Patricia Johnson,patricia.johnson@contoso.com,555-0105,ACCT-50034,James Johnson,Spouse,Thomas Johnson,Son,2001-01-08,Estate planning update,2026-06-05,Completed

@@ -77,9 +77,9 @@ The **Model-Driven App** (Lab 2) is designed for reviewers and approvers. This *
    SortByColumns(
        Filter(
            '{Prefix} Beneficiary Change Requests',
-           'Request Status' = 'Request Status'.Draft
-              || 'Request Status' = 'Request Status'.Submitted
-              || 'Request Status' = 'Request Status'.'Under Review'
+           'Request Status' = 'Request Status ({Prefix} Beneficiary Change Requests)'.Draft
+              || 'Request Status' = 'Request Status ({Prefix} Beneficiary Change Requests)'.Submitted
+              || 'Request Status' = 'Request Status ({Prefix} Beneficiary Change Requests)'.'Under Review'
        ),
        "createdon",
        SortOrder.Descending

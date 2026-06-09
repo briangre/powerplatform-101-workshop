@@ -108,8 +108,9 @@ When creating the **Request Status** column:
 
 > 💡 **Shortcut available:** If you'd rather import pre-built sample data instead of typing it manually, see the [Sample Data Import Guide](../resources/sample-data/README.md). A CSV file with 5 ready-to-import records is provided in the `resources/sample-data/` folder.
 
-1. Click on the **Data** tab (or switch to the table's data view)
-2. Add **3-4 sample rows** with fictional data:
+1. While viewing the Table, notice the data rows at the bottom.
+2. Click on the **Edit** button (or 'edit in new tab' to switch to the table's data view)
+3. Add **3-4 sample rows** with fictional data:
 
 **Example Row 1:**
 | Field | Value |

@@ -187,7 +187,7 @@ Add buttons below the form for the intake team's workflow:
    Patch(
        '{Prefix} Beneficiary Change Requests',
        frmRequest.LastSubmit,
-       {'Request Status': 'Request Status'.Submitted}
+       {'Request Status': 'Request Status ({Prefix} Beneficiary Change Requests)'.Submitted}
    );
    SubmitForm(frmRequest)
    ```

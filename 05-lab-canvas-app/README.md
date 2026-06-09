@@ -184,20 +184,13 @@ Add buttons below the form for the intake team's workflow:
    - **Fill:** A green or accent color to make it stand out
    - **OnSelect:**
    ```
-   Patch(
-       '{Prefix} Beneficiary Change Requests',
-       frmRequest.LastSubmit,
-       {'Request Status': 'Request Status ({Prefix} Beneficiary Change Requests)'.Submitted}
-   );
    SubmitForm(frmRequest)
    ```
-   > This updates the status to "Submitted" and saves the record. Once submitted, the Power Automate flow (Lab 4) will pick it up.
-   
-   **Alternative simpler approach:** Unlock the Request Status data card, and before submitting, set its value:
+   - Unlock the **Request Status** data card and set its **Update** property to:
    ```
-   // Set status Update property to Submitted, then:
-   SubmitForm(frmRequest)
+   'Request Status ({Prefix} Beneficiary Change Requests)'.Submitted
    ```
+   > This sets the status to "Submitted" when saving from this action. Once submitted, the Power Automate flow (Lab 4) will pick it up.
 
 #### Cancel Button
 
@@ -265,7 +258,7 @@ Before moving on, confirm:
 | Clicking a gallery item doesn't load the form | Verify the form's `Item` property is set to `Gallery1.Selected` |
 | Form shows "No item to display" | For new records, ensure `NewForm(frmRequest)` is called before navigating |
 | "Save as Draft" creates a new record instead of updating | Check that the form's Item property is correctly linked to the gallery selection |
-| Status doesn't change to Submitted | Verify you're patching with the correct choice value |
+| Status doesn't change to Submitted | Verify the **Request Status** data card **Update** property is set to `'Request Status ({Prefix} Beneficiary Change Requests)'.Submitted` |
 | Data source not found | Confirm the Dataverse table is connected in the Data panel |
 
 ---

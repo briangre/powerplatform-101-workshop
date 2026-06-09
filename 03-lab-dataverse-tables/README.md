@@ -33,7 +33,7 @@ A beneficiary change request captures the following information:
 
 ### Step 2: Create the Beneficiary Change Request Table
 
-1. Inside your solution, click **+ New** → **Table** → **Table**
+1. Inside your solution, click **+ New** → **Table** → **Table (advanced properties)**
 2. Fill in:
    - **Display name:** `{Prefix} Beneficiary Change Request`  
      (e.g., `BG Beneficiary Change Request`)

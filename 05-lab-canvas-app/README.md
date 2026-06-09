@@ -57,7 +57,7 @@ The **Model-Driven App** (Lab 2) is designed for reviewers and approvers. This *
 
 2. Insert → **Text label** (on top of the rectangle)
    - **Text:** `Beneficiary Change Request — Intake Dashboard`
-   - **Font size:** 22, **Bold:** true, **Color:** White
+   - **Font size:** 24, **Bold:** true, **Color:** White, **Align:** Center
 
 #### Add the "New Request" Button
 

@@ -78,7 +78,7 @@ Click into your new table, then go to the **Columns** tab. Add the following col
 |---|---|---|---|---|
 | Reason for Change | `{prefix}_reasonforchange` | Multiple lines of text | Required | |
 | Request Date | `{prefix}_requestdate` | Date Only | Required | Default: today |
-| Request Status | `{prefix}_requeststatus` | Choice | Required | See choices below |
+| Request Status | `{prefix}_requeststatus` | Choice | Required | See choices in step 4 below |
 | Reviewer Notes | `{prefix}_reviewernotes` | Multiple lines of text | Optional | |
 
 ### Step 4: Create the Request Status Choice Column
